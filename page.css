@@ -1,0 +1,262 @@
+/* Hallmark · shape: Guided Tour (numbered stops, a guide speaks at each) · genre: modern-minimal · theme: custom (by request: plain white, square corners, no gradient, no badge) · job: hire · idea: "a white page where a small guide walks the visitor past a turning dial of real client sites" · vibe: "plain, dry, exact, a little funny"
+ * paper: oklch(100% 0 0) · accent: oklch(12% 0 0) · display: Instrument Sans · body: Inter · surface: absolute · hero: a prompt box that waits for Enter, then a name, one line, the facts set as a ledger, the guide flying in · nav: two round buttons centred at the top, home and menu · footer: two lines · imagery: the product, 14 real client screenshots on the dial · signature: the dial, a half circle with fourteen sites on its curved ticks, turned by scrolling so each site comes under the needle, and one guide creature, his assistant, that flies to a blank spot at each stop
+ * axes: white/system-sans/black · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V5 · weakest: P, a white page in a system face can read as any designer's site; the dial and the guide's voice carry it, and every picture is a real client site */
+/* Hallmark · waive 7b · --color-paper is oklch(100% 0 0) on purpose · the owner asked for a plain white page with no tint, in his words */
+/* Hallmark · waive 22 · every neutral is zero chroma · the owner asked for plain white and grey, no colour cast; the client screenshots carry all the colour */
+/* Hallmark · waive 1 · display face is the system sans · the owner pointed at a reference set in the system face and asked for that plainness */
+/* Hallmark · waive 39b · .dial__list buttons are 32px in two seven-row indexes · an index of site names at each side of the dial, app-style rows, each with a 32px hit height and the dial itself as the main control */
+/* Hallmark · waive 77 · the close is the guide's last line and one heading · the tour ends on a single line by design; the mass above it is the 290-row list */
+@import url("./tokens.css");
+@import url("./base.css");
+
+body { background: var(--color-paper); }
+h1, h2, h3 { font-weight: 500; color: var(--color-ink); letter-spacing: var(--tracking-display); }
+.num { font-variant-numeric: tabular-nums; }
+.lead { font-size: var(--text-lead); color: var(--color-ink-2); max-width: 46ch; }
+a { color: var(--color-ink); }
+a:hover { color: var(--color-ink-2); }
+.skip { position: absolute; left: var(--space-md); top: -100px; z-index: var(--z-toast); padding: var(--space-xs) var(--space-md); background: var(--color-ink); color: var(--color-paper); }
+.skip:focus-visible { top: var(--space-md); }
+
+/* keys: one black square button, one text link */
+.key { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-lg); background: var(--color-ink); color: var(--color-paper); font-size: var(--text-md); text-decoration: none; border: var(--rule-hair) solid var(--color-ink); transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out); }
+.key:hover { background: var(--color-paper); color: var(--color-ink); }
+.key:active { background: var(--color-paper-3); }
+.key:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; transition: none; }
+.key:disabled, .key[aria-disabled="true"] { opacity: 0.4; cursor: not-allowed; }
+.key--text { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-ink-2); text-decoration: none; }
+.key--text:hover { color: var(--color-ink); text-decoration: underline; }
+.key--text:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.keys { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-lg); }
+
+/* nav: two round buttons, as on a watch face */
+.top { position: fixed; left: 0; right: 0; top: 0; z-index: var(--z-sticky-nav); display: grid; justify-items: center; pointer-events: none; }
+.top::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 96px; background: var(--color-paper); -webkit-mask-image: linear-gradient(to bottom, var(--color-ink) 55%, transparent); mask-image: linear-gradient(to bottom, var(--color-ink) 55%, transparent); }
+main { padding-top: 84px; }
+.top__nav { position: relative; display: flex; gap: var(--space-xs); padding: var(--space-md); pointer-events: auto; }
+.top__btn { display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--color-paper); border: var(--rule-hair) solid var(--color-rule); box-shadow: 0 2px 10px -2px var(--color-shadow-soft); color: var(--color-ink); cursor: pointer; transition: transform var(--dur-micro) var(--ease-out), border-color var(--dur-short) var(--ease-out); }
+.top__btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.top__btn:hover { border-color: var(--color-ink); }
+.top__btn:active { transform: translateY(1px); }
+.top__btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.top__btn[aria-expanded="true"] { background: var(--color-ink); color: var(--color-paper); border-color: var(--color-ink); }
+.menu { position: relative; pointer-events: auto; display: grid; gap: var(--space-2xs); padding: var(--space-md) var(--space-lg); background: var(--color-paper); border: var(--rule-hair) solid var(--color-rule); box-shadow: 0 8px 30px -10px var(--color-shadow-menu); margin-top: calc(-1 * var(--space-xs)); }
+.menu a { text-decoration: none; color: var(--color-ink-2); padding: var(--space-xs) 0; font-size: var(--text-sm); }
+.menu a:hover { color: var(--color-ink); }
+.menu a:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+/* the guide: a small grey creature that wobbles and blinks */
+.buddy { flex: none; width: 48px; height: 48px; display: block; }
+.buddy svg { width: 100%; height: 100%; overflow: visible; animation: wobble 5s var(--ease-in-out) infinite; transform-origin: 50% 60%; }
+.buddy__body { fill: var(--color-paper-3); stroke: var(--color-ink); stroke-width: 1.5; }
+.buddy__eye { fill: var(--color-ink); animation: blink 4.5s steps(1) infinite; transform-origin: center; }
+.buddy__glint { fill: var(--color-paper); }
+.buddy__mouth { fill: none; stroke: var(--color-ink); stroke-width: 1.5; stroke-linecap: round; }
+.buddy--big { width: 160px; height: 160px; }
+@keyframes wobble { 0%, 100% { transform: rotate(-3deg) scale(1); } 50% { transform: rotate(3deg) scale(1.03, 0.97); } }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 94%, 98% { transform: scaleY(0.1); } }
+
+/* the guide: one creature fixed to the screen; it flies to the top of each stop and says its line */
+.guide { position: fixed; left: 0; top: 0; z-index: var(--z-sticky); display: flex; gap: var(--space-sm); align-items: flex-start; max-width: 40ch; color: var(--color-ink); line-height: 1.45; transform: translate(var(--gx, 16px), var(--gy, 96px)); pointer-events: none; }
+.js .guide:not(.is-on) { opacity: 0; }
+.guide { transition: opacity 300ms var(--ease-out); }
+.guide.is-away { opacity: 0; }
+.guide.is-flying { transition: transform 850ms var(--ease-in-out); }
+.guide.is-flying .buddy svg { animation: hop 850ms var(--ease-in-out); }
+.guide__line { margin: 0; transition: opacity var(--dur-short) var(--ease-out); }
+.guide.is-swap .guide__line { opacity: 0; }
+@keyframes hop { 0%, 100% { transform: none; } 35% { transform: translateY(-14px) rotate(-10deg) scale(1.1); } 75% { transform: translateY(3px) rotate(5deg); } }
+/* the lines the guide says live in the page too, read in place without scripting */
+.say { color: var(--color-ink); max-width: 40ch; line-height: 1.45; }
+.js .say { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-lg); }
+.spot { display: block; width: 0; height: 48px; }
+/* a blank column spot: full width of its column, sticks while the column's neighbour scrolls */
+.spot--col { width: 100%; position: sticky; top: 120px; margin-top: var(--space-lg); }
+.case__num { display: grid; align-content: start; }
+.cases__name { display: grid; align-content: start; }
+.step { display: flex; gap: var(--space-sm); color: var(--color-ink-2); font-size: var(--text-sm); margin-bottom: var(--space-lg); }
+.step .num { color: var(--color-muted); }
+
+/* hero: a ledger */
+.hero { min-height: calc(100dvh - 84px); display: grid; align-items: stretch; padding-block: var(--space-xl) var(--section-gap-s); }
+.hero__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 1fr auto; grid-template-areas: "who ." "keys guide" "about facts"; gap: var(--space-xl) var(--gap-columns); }
+.hero__who { grid-area: who; }
+.hero__keys { grid-area: keys; align-self: start; }
+.hero__about { grid-area: about; }
+.facts { grid-area: facts; }
+.hero__who h1 { font-size: var(--text-lead); font-weight: 500; line-height: 1.3; }
+.hero__who .lead { color: var(--color-muted); }
+.hero__say { grid-area: guide; justify-self: end; align-self: start; }
+.hero__spot { grid-area: guide; justify-self: end; align-self: start; }
+.hero__about { align-self: end; display: grid; gap: var(--space-lg); max-width: 44ch; }
+.hero__about p { font-size: var(--text-lead); color: var(--color-ink); }
+.facts { margin: 0; align-self: end; justify-self: end; display: grid; gap: var(--space-xs); width: 100%; max-width: 420px; }
+.facts > div { display: flex; justify-content: space-between; gap: var(--space-lg); }
+.facts dt { color: var(--color-muted); }
+.facts dd { margin: 0; color: var(--color-ink); }
+
+/* the entrance: the guide arrives first, says hello, then the page */
+.entrance { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; background: var(--color-paper); transition: opacity 500ms var(--ease-in-out); }
+.entrance__stage { display: grid; justify-items: center; gap: var(--space-lg); width: 100%; padding: 0 var(--gutter); animation: arrive 700ms var(--ease-out) both; }
+.entrance__term { width: 100%; max-width: 600px; min-height: 8.5em; padding: var(--space-md) var(--space-lg); border: var(--rule-hair) solid var(--color-rule); font-family: var(--font-mono); font-size: var(--text-sm); line-height: 1.6; color: var(--color-ink); text-align: left; display: grid; align-content: start; gap: var(--space-2xs); animation: fade 400ms var(--ease-out) 500ms both; }
+.entrance__row { margin: 0; overflow-wrap: break-word; min-width: 0; }
+.entrance__row::before { content: "> "; color: var(--color-muted); }
+.entrance__row.is-cursor::after { content: ""; display: inline-block; width: 0.55em; height: 1em; margin-left: var(--space-3xs); vertical-align: -0.12em; background: var(--color-ink); animation: caret 1s steps(1) infinite; }
+@keyframes caret { 50% { opacity: 0; } }
+.entrance__go { min-height: 40px; padding: 0 var(--space-md); background: none; border: var(--rule-hair) solid var(--color-rule); color: var(--color-ink-2); cursor: pointer; font-size: var(--text-sm); }
+.entrance__go:hover { border-color: var(--color-ink); color: var(--color-ink); }
+.entrance__go:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.entrance.is-out { opacity: 0; pointer-events: none; }
+.is-entrance body { overflow: hidden; }
+@keyframes arrive { from { opacity: 0; transform: translateY(24px) scale(0.9); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* the dial */
+.dial-section { position: relative; }
+.js .dial-section { height: calc(100vh * var(--stops, 12)); }
+/* the dial keeps its shape: full width when the screen is tall enough, otherwise as tall as the room under the header, centred; the two indexes sit level with its top */
+.sticky { --dial-h: min(calc(100dvh - 160px), calc((100vw - 2 * var(--gutter)) * 820 / 1600), 820px); position: sticky; top: 0; height: 100dvh; min-height: 640px; display: grid; grid-template-rows: auto 1fr; overflow: clip; }
+.sticky > .container { padding-top: 104px; display: grid; gap: var(--space-md); }
+.sticky .step { margin-bottom: 0; }
+.dial { position: relative; align-self: end; justify-self: center; height: var(--dial-h); width: auto; aspect-ratio: 1600 / 820; min-height: 0; }
+.dial__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dial__disc { fill: var(--color-paper-2); }
+.dial__tick { stroke: var(--color-tick); stroke-width: 1; }
+.dial__tick--major { stroke: var(--color-ink); stroke-width: 2; }
+.dial__label { font-family: var(--font-body); font-size: 20px; fill: var(--color-muted); }
+.dial__label.on { fill: var(--color-ink); }
+.dial__ring { transform-origin: 800px 820px; transform: rotate(var(--rot, 0deg)); }
+.dial__needle { position: absolute; left: 50%; top: 7.5%; width: 2px; height: 56px; background: var(--color-ink); transform: translateX(-50%); }
+.dial__needle::before { content: ""; position: absolute; left: 50%; top: -10px; width: 10px; height: 10px; background: var(--color-ink); transform: translateX(-50%); }
+.dial__stage { position: absolute; left: 50%; top: 30%; width: min(40%, 640px, 50dvh); transform: translateX(-50%); display: grid; justify-items: center; gap: var(--space-sm); text-align: center; }
+.dial__shots { position: relative; width: 100%; aspect-ratio: 16 / 10; background: var(--color-paper); border: var(--rule-hair) solid var(--color-rule); }
+.dial__shots img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transition: opacity var(--dur-long) var(--ease-out); }
+.dial__shots img.on, .dial__slot.on { opacity: 1; }
+.dial__slot { position: absolute; inset: 0; display: grid; place-items: center; padding: var(--space-md); color: var(--color-muted); font-size: var(--text-sm); text-align: center; opacity: 0; transition: opacity var(--dur-long) var(--ease-out); }
+.dial__caption { color: var(--color-ink-2); font-size: var(--text-sm); margin-top: var(--space-md); }
+.dial__name { font-size: var(--text-xl); font-weight: 500; color: var(--color-ink); letter-spacing: var(--tracking-display); }
+.dial__sub { color: var(--color-ink-2); max-width: 56ch; }
+.dial__links { display: flex; gap: var(--space-lg); font-size: var(--text-sm); }
+.dial__list { --edge: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter))); list-style: none; margin: 0; padding: 0; position: absolute; top: calc(100dvh - var(--dial-h) + 40px); left: var(--edge); display: grid; gap: 0; font-size: var(--text-xs); }
+.dial__list--right { left: auto; right: var(--edge); justify-items: end; }
+.dial__list button { background: none; border: 0; padding: 0; color: var(--color-ink-2); cursor: pointer; text-align: left; min-height: 32px; transition: color var(--dur-micro) var(--ease-out); }
+.dial__list button:hover, .dial__list button[aria-current="true"] { color: var(--color-ink); }
+.dial__list button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.dial__list button::before, .dial__list--right button::after { content: ""; display: inline-block; width: 12px; height: 1px; background: var(--color-ink); vertical-align: middle; margin-right: var(--space-xs); opacity: 0; transition: opacity var(--dur-micro) var(--ease-out); }
+.dial__list--right button::before { display: none; }
+.dial__list--right button::after { margin-right: 0; margin-left: var(--space-xs); }
+.dial__list button[aria-current="true"]::before, .dial__list--right button[aria-current="true"]::after { opacity: 1; }
+
+/* stops */
+.stage { padding-block: var(--space-3xl); border-top: var(--rule-hair) solid var(--color-rule); }
+.stage h2 { font-size: var(--text-section); line-height: 1.05; margin-block: var(--space-2xl) var(--space-md); }
+.case { margin-top: var(--space-3xl); display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-lg) var(--gap-columns); padding-top: var(--space-lg); border-top: var(--rule-hair) solid var(--color-ink); }
+.case__num { font-size: var(--text-lead); color: var(--color-ink-2); }
+.case__num b { display: block; font-size: var(--text-display-s); font-weight: 500; line-height: 1; color: var(--color-ink); letter-spacing: var(--tracking-display); margin-bottom: var(--space-sm); }
+.case__points { list-style: none; margin: 0; padding: 0; }
+.case__points li { padding-block: var(--space-md); border-bottom: var(--rule-hair) solid var(--color-rule); color: var(--color-ink); }
+.case__tech { grid-column: 2; display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-lg); font-size: var(--text-sm); color: var(--color-muted); }
+.cases { list-style: none; margin: var(--space-3xl) 0 0; padding: 0; }
+.cases li { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr); gap: var(--space-md) var(--gap-columns); padding-block: var(--space-2xl); border-top: var(--rule-hair) solid var(--color-rule); }
+.cases h3 { font-size: var(--text-md); font-weight: 500; }
+.cases .cases__body p { color: var(--color-ink-2); }
+.cases .cases__body .point { color: var(--color-ink); margin-top: var(--space-xs); }
+.cases .meta { display: grid; gap: var(--space-2xs); font-size: var(--text-sm); color: var(--color-muted); }
+.proof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); margin-top: var(--space-xl); }
+.proof p { padding-top: var(--space-md); border-top: var(--rule-hair) solid var(--color-ink); color: var(--color-ink); }
+.services { margin: 0; display: grid; }
+.services > div { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 6fr) minmax(0, 2fr); gap: var(--gap-columns); padding-block: var(--space-lg); border-top: var(--rule-hair) solid var(--color-rule); }
+.services dt { color: var(--color-ink); font-weight: 500; }
+.services dd { margin: 0; color: var(--color-ink-2); }
+.services__tech { color: var(--color-muted); font-size: var(--text-sm); }
+
+/* the browser: plain rows */
+.browser { padding-block: var(--space-3xl); border-top: var(--rule-hair) solid var(--color-rule); }
+.tools { margin: var(--space-xl) 0 var(--space-lg); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 260px); gap: var(--space-sm) var(--space-md); position: sticky; top: 84px; z-index: var(--z-raised); background: var(--color-paper); padding-block: var(--space-sm); }
+.tools__search input, .tools__ind select { width: 100%; min-height: 44px; padding: 0 var(--space-md); border: var(--rule-hair) solid var(--color-muted); background: var(--color-paper); color: var(--color-ink); border-radius: 0; transition: border-color var(--dur-short) var(--ease-out); }
+.tools__search input::placeholder { color: var(--color-muted); }
+.tools__search input:hover, .tools__ind select:hover { border-color: var(--color-ink); }
+.tools__search input:focus-visible, .tools__ind select:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; }
+.tools__search input:disabled, .tools__ind select:disabled { opacity: 0.4; cursor: not-allowed; }
+.tray { grid-column: 1 / -1; margin: 0; padding: 0; border: 0; display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-md); }
+.tray input { position: absolute; opacity: 0; pointer-events: none; }
+.tray label { display: inline-flex; align-items: center; min-height: 36px; color: var(--color-muted); font-size: var(--text-sm); cursor: pointer; border-bottom: 2px solid transparent; transition: color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out); }
+.tray label:hover { color: var(--color-ink); }
+.tray input:checked + label { color: var(--color-ink); border-color: var(--color-ink); }
+.tray input:focus-visible + label { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.tools__count { grid-column: 1 / -1; font-size: var(--text-sm); color: var(--color-muted); }
+.years { display: grid; }
+.year { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--space-md) var(--gap-columns); padding-block: var(--space-xl); border-top: var(--rule-hair) solid var(--color-ink); }
+.year__head { position: sticky; top: 260px; align-self: start; display: grid; gap: var(--space-2xs); }
+.year__head .spot--col { position: static; }
+.year__head .num { font-size: var(--text-3xl); line-height: 1; font-weight: 500; letter-spacing: var(--tracking-display); }
+.year__head small { color: var(--color-muted); font-size: var(--text-sm); }
+.rows { list-style: none; margin: 0; padding: 0; }
+.row { border-bottom: var(--rule-hair) solid var(--color-rule); }
+.row__btn { width: 100%; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 3fr) minmax(0, 1fr); gap: var(--space-md); align-items: center; min-height: 68px; padding: var(--space-xs) 0; text-align: left; background: none; border: 0; color: var(--color-ink-2); cursor: pointer; font-size: var(--text-sm); line-height: 1.3; transition: color var(--dur-micro) var(--ease-out); }
+.row__btn:hover { color: var(--color-ink); }
+.row__btn:hover .row__name { text-decoration: underline; }
+.row__btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
+.row__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.row__btn[aria-expanded="true"] .row__name { text-decoration: underline; }
+.row__name { font-size: var(--text-md); color: var(--color-ink); min-width: 0; overflow-wrap: break-word; }
+.row__cat, .row__role { min-width: 0; }
+.row__when { white-space: nowrap; text-align: right; color: var(--color-muted); font-variant-numeric: tabular-nums; }
+.detail { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-lg) var(--gap-columns); padding: var(--space-md) 0 var(--space-xl); }
+.detail ul { margin: var(--space-md) 0 0; padding-left: 1.1em; color: var(--color-ink-2); }
+.detail .links { margin-top: var(--space-lg); display: flex; flex-wrap: wrap; gap: var(--space-lg); font-size: var(--text-sm); }
+.detail dl { margin: var(--space-md) 0 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-2xs) var(--space-md); font-size: var(--text-sm); }
+.detail dt { color: var(--color-muted); }
+.detail dd { margin: 0; color: var(--color-ink-2); }
+.detail__shot { margin: 0; }
+.detail__shot img { aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border: var(--rule-hair) solid var(--color-rule); }
+.more-wrap { list-style: none; }
+.empty { padding: var(--space-xl) 0; color: var(--color-ink-2); }
+.year--early .early { color: var(--color-ink-2); max-width: 60ch; align-self: center; }
+
+/* the close */
+.close { padding-block: var(--space-3xl) var(--space-2xl); border-top: var(--rule-hair) solid var(--color-rule); display: grid; }
+.close .container { display: grid; gap: var(--space-xl); justify-items: start; }
+.close .head { justify-self: stretch; }
+.close h2 { font-size: var(--text-section); line-height: 1.05; }
+.foot { padding-block: var(--space-lg) var(--space-2xl); }
+.foot__row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-md); color: var(--color-muted); font-size: var(--text-sm); border-top: var(--rule-hair) solid var(--color-rule); padding-top: var(--space-lg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .buddy svg, .buddy__eye, .entrance__stage, .entrance__term, .entrance__row.is-cursor::after, .guide.is-flying .buddy svg { animation: none; }
+  .entrance { display: none; }
+  .dial__ring, .dial__shots img, .key, .row__btn, .tray label, .guide.is-flying, .guide__line, .dial__list button::before, .dial__list--right button::after { transition: none; }
+}
+@media (max-width: 80rem) {
+  .dial__list { display: none; }
+}
+@media (max-width: 60rem) {
+  .hero { min-height: 0; }
+  .hero__grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; grid-template-areas: "who" "keys" "guide" "about" "facts"; gap: var(--space-xl); }
+  .hero__say, .hero__spot, .facts { justify-self: start; }
+  .guide { left: 0; right: 0; top: auto; bottom: 0; transform: none; max-width: none; align-items: center; padding: var(--space-sm) var(--gutter); background: var(--color-paper); border-top: var(--rule-hair) solid var(--color-rule); font-size: var(--text-sm); }
+  .guide.is-flying { transition: none; }
+  .guide .buddy { width: 36px; height: 36px; }
+  .foot { padding-bottom: 120px; }
+  .js .dial-section { height: calc(100vh * var(--stops, 12) * 0.6); }
+  .sticky { min-height: 0; padding-bottom: 80px; }
+  .dial { aspect-ratio: auto; height: auto; width: 100%; display: grid; gap: var(--space-sm); align-content: end; }
+  .spot--col { display: none; }
+  .dial__svg { position: static; order: 2; width: 100%; height: clamp(120px, 20dvh, 240px); }
+  .dial__needle { display: none; }
+  .dial__stage { position: static; order: 1; transform: none; width: 100%; gap: var(--space-2xs); }
+  .dial__shots { width: min(100%, 48dvh); aspect-ratio: 16 / 10; margin-inline: auto; }
+  .dial__name { max-width: 100%; overflow-wrap: break-word; }
+  .dial__caption { margin-top: var(--space-xs); }
+  .dial__name { font-size: var(--text-lg); }
+  .dial__sub { font-size: var(--text-sm); }
+  .dial__list { display: none; }
+  .case, .cases li, .proof, .services > div, .detail, .year { grid-template-columns: minmax(0, 1fr); }
+  .case__tech { grid-column: 1; }
+  .tools { position: static; grid-template-columns: minmax(0, 1fr); }
+  .row__btn { grid-template-columns: minmax(0, 1fr) auto; }
+  .row__cat, .row__role { display: none; }
+  .year__head { position: static; }
+}
