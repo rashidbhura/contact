@@ -378,7 +378,7 @@
   if (ent && !reduce && !location.hash) {
     ent.hidden = false; document.documentElement.classList.add('is-entrance');
     const term = $('[data-entrance-term]', ent), go = $('[data-go]', ent);
-    const lines = ['Hello. I’m Rashid’s assistant.', 'Rashid builds WordPress sites and keeps them running. I give the tour.', 'Press Enter, Space or click anywhere to begin.'];
+    const lines = ['Hello. I’m his assistant.', 'He builds WordPress sites and keeps them running. I give the tour.', 'Press Enter, Space or click anywhere to begin.'];
     let li = 0, ci = 0, row = null, done = false, timer;
     const type = () => {
       if (li >= lines.length) return;
@@ -395,7 +395,6 @@
       guideStart(true);
     };
     timer = setTimeout(type, 700);
-    go.focus({ preventScroll: true });
     ent.addEventListener('click', finish);
     document.addEventListener('keydown', (ev) => { if (!done && (ev.key === 'Enter' || ev.key === ' ' || ev.key === 'Escape')) { ev.preventDefault(); finish(); } });
   } else guideStart(false);
