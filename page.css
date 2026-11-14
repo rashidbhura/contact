@@ -76,6 +76,8 @@ main { padding-top: 84px; }
 .spot--col { width: 100%; position: sticky; top: 120px; margin-top: var(--space-lg); }
 .case__num { display: grid; align-content: start; }
 .cases__name { display: grid; align-content: start; }
+/* the name column's blank spot is as tall as the guide's longest line, so the sticky spot leaves the row before the next name arrives */
+.cases__name .spot--col { min-height: 240px; }
 .step { display: flex; gap: var(--space-sm); color: var(--color-ink-2); font-size: var(--text-sm); margin-bottom: var(--space-lg); }
 .step .num { color: var(--color-muted); }
 
